@@ -20,7 +20,7 @@ The system adheres strictly to the architectural design principle: **"Intervene 
 
 Designed with a **Bright Glassy Theme (Glassmorphism)**:
 - **Luminous Aurora Backdrop**: High-contrast, vibrant pastel mesh gradients with smooth ambient floating glow orbs.
-- **Frosted Translucent Glass Panels**: `backdrop-filter: blur(24px) saturate(180%)`, milky glass card layers, glowing borders, and specular highlights.
+- **Frosted Translucent Glass Panels**: `backdrop-filter: blur(20px) saturate(180%)`, milky glass card layers, glowing borders, and specular highlights.
 - **Real-Time Live Typing Scanner**: Dynamic evidence check bar with glowing pulse indicator that scans past regrets as you type.
 - **Frosted Warning Shield Modal**: Presents similarity scores, citations of exact past regret memories, and choices (*"Reconsider & Prevent"* vs *"Proceed Anyway"*).
 
@@ -38,7 +38,7 @@ Designed with a **Bright Glassy Theme (Glassmorphism)**:
 # 1. Navigate to the project root
 cd "d:/ai project"
 
-# 2. Install minimal dependencies
+# 2. Install dependencies
 pip install -r requirements.txt
 
 # 3. Launch the application
@@ -47,6 +47,26 @@ python run.py
 
 The script will automatically initialize the local SQLite database, populate academic sample records from the synopsis, and launch your browser at:
 `http://127.0.0.1:5000`
+
+---
+
+## ⚡ Supabase Database Setup
+
+A ready-to-run Supabase PostgreSQL schema script is provided in **[`supabase_schema.sql`](supabase_schema.sql)**.
+
+### How to Apply to Supabase:
+1. Open your project on [Supabase Dashboard](https://supabase.com/dashboard).
+2. Go to the **SQL Editor** tab from the left sidebar.
+3. Click **New Query**, paste the full contents of `supabase_schema.sql`, and click **Run**.
+4. All 4 tables (`regrets`, `todos`, `matches`, `patterns`), indexes, RLS policies, and academic seed records will be created instantly.
+
+### Supabase Table Schema Overview:
+| Table Name | Description | Key Columns |
+| :--- | :--- | :--- |
+| **`regrets`** | Historical retrospective records | `id`, `description`, `tag`, `time_of_day`, `hour_of_day`, `intensity`, `context`, `created_at` |
+| **`todos`** | Upcoming decisions & actions | `id`, `task`, `tag`, `planned_time`, `planned_hour`, `status`, `warning_triggered`, `created_at` |
+| **`matches`** | Linkage between current action and regret | `id`, `todo_id`, `regret_id`, `score`, `match_reasons`, `warning_shown`, `user_action`, `created_at` |
+| **`patterns`** | Clustered behavioral vulnerabilities | `id`, `tag`, `title`, `frequency`, `context_summary`, `explanation`, `updated_at` |
 
 ---
 
@@ -66,6 +86,8 @@ d:/ai project/
 │   └── js/
 │       ├── api.js          # Asynchronous backend API client
 │       └── app.js          # Real-time typing scanner and UI state manager
+├── supabase_schema.sql     # Ready-to-run Supabase / PostgreSQL schema script
+├── .env.example            # Environment variables template for Supabase
 ├── requirements.txt        # Backend dependencies
 ├── run.py                  # Single-command launcher script with auto-browser
 └── README.md               # Project documentation
@@ -107,18 +129,12 @@ d:/ai project/
 (Prevented)       (Pending)
 ```
 
-### Data Schema (SQLite)
-1. **`regrets`**: `id`, `description`, `tag`, `time_of_day`, `hour_of_day`, `intensity`, `context`, `timestamp`
-2. **`todos`**: `id`, `task`, `tag`, `planned_time`, `planned_hour`, `status`, `warning_triggered`, `created_at`
-3. **`matches`**: `id`, `todo_id`, `regret_id`, `score`, `match_reasons`, `warning_shown`, `user_action`, `created_at`
-4. **`patterns`**: `id`, `tag`, `title`, `frequency`, `context_summary`, `explanation`, `updated_at`
-
 ---
 
 ## 🧪 Built-in Demonstration Scenarios
 
-Click any chip in the **Quick Test Scenarios** bar at the top of the app:
-1. **🎧 Late-Night Headphones Purchase**: Matches past 1 AM impulsive shopping regrets $\to$ Warning triggered with 85%+ confidence.
-2. **📱 Late Reels Before Exam**: Matches past 3 AM sleep disruption regrets $\to$ Warning triggered.
-3. **⏳ Postpone Project Work**: Matches past last-minute assignment submission panic $\to$ Warning triggered.
-4. **📚 Safe Morning Study**: Regular daytime study session $\to$ Zero false warning (Silent pass).
+Click any chip in the **⚡ Try:** picker at the top of the app:
+1. **Headphones Purchase**: Matches past 1 AM impulsive shopping regrets $\to$ Warning triggered with 85%+ confidence.
+2. **Reels Before Exam**: Matches past 3 AM sleep disruption regrets $\to$ Warning triggered.
+3. **Delay Project Work**: Matches past last-minute assignment submission panic $\to$ Warning triggered.
+4. **Safe Study**: Regular daytime study session $\to$ Zero false warning (Silent pass).
