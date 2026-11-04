@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>REWIND — AI Personal Decision & Regret Pattern Assistant</title>
+  <link rel="stylesheet" href="/css/glassy.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'><path d='M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z'/></svg>">
+</head>
+<body>
+  <!-- Ambient Luminous Glow Orbs for Soft Depth -->
+  <div class="ambient-glow orb-1"></div>
+  <div class="ambient-glow orb-2"></div>
+
+  <div class="app-layout">
+    
+    <!-- Clean Minimalist Header -->
+    <header class="glass-header">
+      <div class="header-inner">
+        <div class="brand">
+          <div class="brand-logo">↺</div>
+          <div>
+            <div class="brand-name">REWIND</div>
+            <div class="brand-tagline">Personal Decision Guard</div>
+          </div>
+        </div>
+
+        <!-- Center Clean Tabs -->
+        <nav class="nav-segmented" id="mainTabs">
+          <button class="tab-btn active" data-tab="tabPlanner">
+            <span class="tab-icon">🎯</span> Plan Decision
+          </button>
+          <button class="tab-btn" data-tab="tabRegrets">
+            <span class="tab-icon">📔</span> Regret History
+          </button>
+          <button class="tab-btn" data-tab="tabPatterns">
+            <span class="tab-icon">💡</span> Insights
+          </button>
+        </nav>
+
+        <!-- Right Actions & Quick Stats -->
+        <div class="header-tools">
+          <div class="stat-bubble" title="Prevented Decisions / Total Regrets Tracked">
+            <span class="bubble-pill bubble-green" id="statPrevented">0</span> avoided
+            <span class="bubble-divider">·</span>
+            <span class="bubble-pill bubble-slate" id="statRegrets">0</span> regrets
+          </div>
+          <button id="btnSeed" class="btn-subtle" title="Load sample academic dataset">
+            ✨ Demo
+          </button>
+          <button id="btnReset" class="btn-subtle" title="Clear all data">
+            🧹
+          </button>
+          <button id="btnAcademicInfo" class="btn-subtle" title="About this Project">
+            ℹ️
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Clean Focused Container -->
+    <main class="main-card-wrap">
+
+      <!-- ================= TAB 1: PLAN DECISION ================= -->
+      <section id="tabPlanner" class="tab-content active">
+        
+        <!-- Decision Creator Card -->
+        <div class="glass-card main-form-card">
+          <div class="card-header-clean">
+            <div>
+              <h2 class="card-title">Check an Upcoming Action</h2>
+              <p class="card-desc">Compare what you're about to do with your past regretted decisions.</p>
+            </div>
+            
+            <!-- Quick Example Dropdown -->
+            <div class="example-picker">
+              <span class="example-label">⚡ Try:</span>
+              <button class="example-chip" data-task="Buy headphones online tonight" data-tag="Spending" data-time="Late Night" data-hour="0">
+                Headphones
+              </button>
+              <button class="example-chip" data-task="Stay up late watching phone reels before lecture" data-tag="Sleep" data-time="Late Night" data-hour="2">
+                Reels
+              </button>
+              <button class="example-chip" data-task="Postpone studying database indexing until tomorrow" data-tag="Procrastination" data-time="Late Night" data-hour="23">
+                Delay
+              </button>
+              <button class="example-chip" data-task="Review BCA lecture notes and database queries" data-tag="Productivity" data-time="Morning" data-hour="10">
+                Safe Study
+              </button>
+            </div>
+          </div>
+
+          <form id="todoForm">
+            <!-- Big Clean Input -->
+            <div class="input-hero-group">
+              <input 
+                type="text" 
+                id="taskInput" 
+                class="input-hero" 
+                placeholder="What are you planning to do? (e.g. Order something online tonight...)"
+                autocomplete="off"
+                required
+              />
+            </div>
+
+            <!-- Live Evidence Scanner Banner -->
+            <div id="liveScanner" class="scanner-banner">
+              <span class="scanner-dot"></span>
+              <span id="scannerText">Live Scanner: Type an upcoming action to scan against past regrets.</span>
+            </div>
+
+            <!-- Context Selectors Row (Clean & Compact) -->
+            <div class="context-bar">
+              <div class="context-item">
+                <span class="context-label">Category:</span>
+                <select id="taskTag" class="select-clean">
+                  <option value="Spending">Spending</option>
+                  <option value="Sleep">Sleep</option>
+                  <option value="Procrastination">Procrastination</option>
+                  <option value="Health">Health</option>
+                  <option value="Social">Social</option>
+                  <option value="Productivity">Productivity</option>
+                  <option value="Study">Study</option>
+                  <option value="General">General</option>
+                </select>
+              </div>
+
+              <div class="context-item">
+                <span class="context-label">When:</span>
+                <select id="taskTime" class="select-clean">
+                  <option value="Late Night" selected>Late Night (10 PM - 4 AM)</option>
+                  <option value="Morning">Morning (5 AM - 11 AM)</option>
+                  <option value="Afternoon">Afternoon (12 PM - 5 PM)</option>
+                  <option value="Evening">Evening (6 PM - 9 PM)</option>
+                </select>
+              </div>
+
+              <div class="context-item hour-item">
+                <span class="context-label">Hour:</span>
+                <input type="number" id="taskHour" class="input-clean text-center" min="0" max="23" value="0" style="width: 54px;" />
+              </div>
+
+              <button type="submit" class="btn-primary" id="btnSubmitTodo">
+                Check & Plan Decision
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Upcoming Decisions Feed -->
+        <div class="feed-section">
+          <div class="feed-header">
+            <h3 class="feed-title">Decisions & Tasks</h3>
+            
+            <div class="filter-group">
+              <button class="filter-pill todo-filter active" data-status="All">All</button>
+              <button class="filter-pill todo-filter" data-status="Pending">Pending</button>
+              <button class="filter-pill todo-filter" data-status="Prevented">Prevented</button>
+              <button class="filter-pill todo-filter" data-status="Completed">Completed</button>
+            </div>
+          </div>
+
+          <div id="todoList" class="cards-list">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ================= TAB 2: REGRET JOURNAL ================= -->
+      <section id="tabRegrets" class="tab-content">
+        
+        <!-- Log Regret Card -->
+        <div class="glass-card main-form-card">
+          <div class="card-header-clean">
+            <div>
+              <h2 class="card-title">Record a Regretted Action</h2>
+              <p class="card-desc">Log past mistakes so the assistant can recognize them before they happen again.</p>
+            </div>
+          </div>
+
+          <form id="regretForm">
+            <div class="input-hero-group">
+              <input 
+                type="text" 
+                id="regretDesc" 
+                class="input-hero" 
+                placeholder="What did you do that you later regretted? (e.g. Bought headphones at 1 AM...)" 
+                required 
+              />
+            </div>
+
+            <div class="context-bar">
+              <div class="context-item">
+                <span class="context-label">Category:</span>
+                <select id="regretTag" class="select-clean">
+                  <option value="Spending">Spending</option>
+                  <option value="Sleep">Sleep</option>
+                  <option value="Procrastination">Procrastination</option>
+                  <option value="Health">Health</option>
+                  <option value="Social">Social</option>
+                  <option value="General">General</option>
+                </select>
+              </div>
+
+              <div class="context-item">
+                <span class="context-label">Timing:</span>
+                <select id="regretTime" class="select-clean">
+                  <option value="Late Night" selected>Late Night</option>
+                  <option value="Morning">Morning</option>
+                  <option value="Afternoon">Afternoon</option>
+                  <option value="Evening">Evening</option>
+                </select>
+              </div>
+
+              <div class="context-item hour-item">
+                <span class="context-label">Hour:</span>
+                <input type="number" id="regretHour" class="input-clean text-center" min="0" max="23" value="1" style="width: 54px;" />
+              </div>
+            </div>
+
+            <div class="context-bar secondary-context-bar">
+              <div class="context-item flex-grow">
+                <span class="context-label">Trigger/Context:</span>
+                <input type="text" id="regretContext" class="input-clean flex-grow" placeholder="e.g. Bored in bed, saw a flash sale..." />
+              </div>
+
+              <div class="context-item intensity-selector">
+                <span class="context-label">Regret: <span id="intensityVal" class="intensity-badge">4/5</span></span>
+                <input type="range" id="regretIntensity" min="1" max="5" value="4" class="slider-clean" />
+              </div>
+
+              <button type="submit" class="btn-primary btn-rose">
+                Save Regret Memory
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Regret History Feed -->
+        <div class="feed-section">
+          <div class="feed-header">
+            <h3 class="feed-title">Recorded Regret Memories</h3>
+
+            <div class="filter-tools">
+              <input type="text" id="regretSearch" class="search-clean" placeholder="🔍 Search memories..." />
+              <select id="regretFilterTag" class="select-clean">
+                <option value="All">All Categories</option>
+                <option value="Spending">Spending</option>
+                <option value="Sleep">Sleep</option>
+                <option value="Procrastination">Procrastination</option>
+                <option value="Health">Health</option>
+                <option value="Social">Social</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="regretList" class="cards-list">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- ================= TAB 3: INSIGHTS & PATTERNS ================= -->
+      <section id="tabPatterns" class="tab-content">
+        
+        <div class="glass-card summary-hero-card">
+          <div class="summary-hero-content">
+            <div class="summary-icon">💡</div>
+            <div>
+              <h2 class="card-title">Behavioral Patterns Discovered</h2>
+              <p class="card-desc">
+                REWIND analyzes repeated regrets to find your personal vulnerability triggers — without generic moral rules.
+              </p>
+            </div>
+          </div>
+          
+          <div class="quick-stats-row">
+            <div class="quick-stat-box">
+              <div class="stat-number" id="statWarnings">0</div>
+              <div class="stat-name">Evidence Warnings Triggered</div>
+            </div>
+            <div class="quick-stat-box">
+              <div class="stat-number" id="statActive">0</div>
+              <div class="stat-name">Active Pending Decisions</div>
+            </div>
+            <div class="quick-stat-box">
+              <div class="stat-number" id="statTopTag" style="font-size: 16px; margin-top: 4px;">Spending</div>
+              <div class="stat-name">Most Common Regret Area</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="feed-section">
+          <div class="feed-header">
+            <h3 class="feed-title">Recurring Patterns</h3>
+          </div>
+
+          <div id="patternsGrid" class="patterns-grid">
+            <!-- Dynamically rendered -->
+          </div>
+        </div>
+
+      </section>
+
+    </main>
+
+    <!-- Subtle Clean Footer -->
+    <footer class="clean-footer">
+      <span><strong>REWIND</strong> • Personal Decision & Regret Pattern Assistant</span>
+      <span class="footer-dot">•</span>
+      <span>BCA Project-I (Session 2026-27)</span>
+      <span class="footer-dot">•</span>
+      <a href="#" id="linkAcademic" class="footer-link">Project Details</a>
+    </footer>
+
+  </div>
+
+  <!-- Evidence Warning Modal (Clean Glassy) -->
+  <div id="warningModal" class="modal-backdrop">
+    <div class="modal-glass">
+      <div class="modal-top">
+        <div class="modal-alert-badge">⚠️</div>
+        <div>
+          <h3 class="modal-title" id="modalHeadline">Wait a moment — check your history</h3>
+          <p class="modal-desc" id="modalMessage">
+            This action strongly resembles previous decisions you marked as regrettable.
+          </p>
+        </div>
+      </div>
+
+      <div class="evidence-box">
+        <div class="evidence-header">
+          <span id="evidenceMatchTag" class="evidence-tag">Category: Spending</span>
+          <span id="evidenceScore" class="evidence-pct">Match: 88%</span>
+        </div>
+        <div class="evidence-body" id="evidenceQuote">
+          "Bought an unnecessary gadget accessory online at 1:15 AM"
+        </div>
+        <div id="evidenceReasons" class="evidence-reasons"></div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btnProceedAnyway" class="btn-ghost">
+          Proceed Anyway
+        </button>
+        <button id="btnReconsider" class="btn-primary btn-emerald">
+          🛡️ Reconsider & Prevent
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Academic Info Modal -->
+  <div id="academicModal" class="modal-backdrop">
+    <div class="modal-glass academic-modal">
+      <div class="modal-top">
+        <div class="modal-alert-badge" style="background: rgba(99, 102, 241, 0.15); color: #4f46e5;">🎓</div>
+        <div>
+          <h3 class="modal-title">REWIND — Academic Synopsis</h3>
+          <p class="modal-desc">BCA-3rd Semester (Session 2026-27) • Project-I (B308)</p>
+        </div>
+      </div>
+
+      <div class="academic-grid">
+        <div class="academic-field">
+          <span class="acad-label">Submitted By</span>
+          <span class="acad-value">TANISH JASWAL (Roll No. 13250545)</span>
+        </div>
+        <div class="academic-field">
+          <span class="acad-label">Submitted To</span>
+          <span class="acad-value">Dr. Poonam Singh, Assistant Professor</span>
+        </div>
+        <div class="academic-field">
+          <span class="acad-label">Institution</span>
+          <span class="acad-value">M.M. Institute of Computer Technology & Business Management (MMDU, Mullana)</span>
+        </div>
+        <div class="academic-field">
+          <span class="acad-label">Design Principle</span>
+          <span class="acad-value" style="color: #4f46e5; font-weight: 700;">"Intervene only on evidence"</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <button id="btnCloseAcademic" class="btn-primary" style="width: 100%;">
+          Close
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
