@@ -3,6 +3,7 @@ import sys
 import webbrowser
 import threading
 import time
+import socket
 
 # Ensure UTF-8 output on Windows
 if sys.platform == "win32":
@@ -19,9 +20,21 @@ from backend.database import init_db, get_db_connection
 from backend.seed_data import seed_database
 from backend.app import app
 
-def open_browser():
-    time.sleep(1.2)
-    url = "http://127.0.0.1:5000"
+def find_available_port(preferred=5050):
+    candidates = [preferred, 5051, 5001, 8000, 8080]
+    for port in candidates:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(0.3)
+                if s.connect_ex(("127.0.0.1", port)) != 0:
+                    return port
+        except Exception:
+            return port
+    return preferred
+
+def open_browser(port):
+    time.sleep(1.0)
+    url = f"http://127.0.0.1:{port}"
     print(f"\n[+] Opening REWIND Assistant in browser: {url}\n", flush=True)
     try:
         webbrowser.open(url)
@@ -49,9 +62,12 @@ if __name__ == "__main__":
     else:
         print(f"[+] Loaded existing database ({count} regret records found).", flush=True)
 
+    # Detect port
+    port = int(os.environ.get("PORT", find_available_port(5050)))
+
     # Launch browser thread
-    threading.Thread(target=open_browser, daemon=True).start()
+    threading.Thread(target=open_browser, args=(port,), daemon=True).start()
 
     # Start Flask Server
-    print("[+] Starting local server on http://127.0.0.1:5000 ... (Press CTRL+C to stop)", flush=True)
-    app.run(host="127.0.0.1", port=5000, debug=False)
+    print(f"[+] Starting local server on http://127.0.0.1:{port} ... (Press CTRL+C to stop)", flush=True)
+    app.run(host="127.0.0.1", port=port, debug=False)

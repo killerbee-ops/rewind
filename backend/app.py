@@ -18,10 +18,6 @@ init_db()
 def serve_index():
     return send_from_directory(STATIC_DIR, "index.html")
 
-@app.route("/<path:filename>")
-def serve_static(filename):
-    return send_from_directory(STATIC_DIR, filename)
-
 # --- API Endpoints ---
 
 @app.route("/api/health", methods=["GET"])
@@ -304,6 +300,11 @@ def reset():
     conn.commit()
     conn.close()
     return jsonify({"success": True, "message": "Database reset cleanly"})
+
+# --- Static File Catch-All ---
+@app.route("/<path:filename>")
+def serve_static(filename):
+    return send_from_directory(STATIC_DIR, filename)
 
 if __name__ == "__main__":
     app.run(host="127.0.0.1", port=5000, debug=True)
