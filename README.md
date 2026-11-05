@@ -6,6 +6,19 @@
 > **Submitted To**: Dr. Poonam Singh, Assistant Professor  
 > **Institution**: M.M. Institute of Computer Technology & Business Management, Maharishi Markandeshwar (Deemed to be University), Mullana–Ambala, Haryana (India)
 
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/killerbee-ops/rewind)
+[![Supabase Database](https://img.shields.io/badge/Supabase-Database-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/dashboard)
+[![Python 3.14](https://img.shields.io/badge/Python-3.14+-3776AB?style=for-the-badge&logo=python&logoColor=white)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-Web%20Framework-000000?style=for-the-badge&logo=flask&logoColor=white)](https://flask.palletsprojects.com/)
+
+---
+
+### 🔗 Project & Database Links
+- 📦 **GitHub Repository**: [https://github.com/killerbee-ops/rewind](https://github.com/killerbee-ops/rewind)
+- ⚡ **Supabase Dashboard**: [https://supabase.com/dashboard](https://supabase.com/dashboard)
+- 📄 **Supabase PostgreSQL Schema**: [`supabase_schema.sql`](supabase_schema.sql)
+- 🌐 **Local Web App**: [http://127.0.0.1:5050](http://127.0.0.1:5050)
+
 ---
 
 ## 🌟 Overview
